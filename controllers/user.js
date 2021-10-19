@@ -63,5 +63,11 @@ module.exports.logIn = (req, res)=>{
 }
 
 module.exports.getUser = (req, res)=>{
-
+    User.find()
+    .then((user)=>{
+        res.json(user)
+    })
+    .catch((err)=>{
+        return res.status(500).json({message : err.message})
+    })
 }
