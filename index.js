@@ -2,6 +2,7 @@ const express = require('express')
 require('dotenv').config();
 const mongoose = require('mongoose')
 const productRouter = require('./routes/product')
+const userRouter = require('./routes/user')
 const bodyParser = require('body-parser')
 
 
@@ -21,6 +22,7 @@ mongoose.connection.once('open', ()=>{
 })
 
 app.use('/product', productRouter)
+app.use('/user', userRouter)
 app.get('/', (req,res)=>{
     res.send("hello")
 })
