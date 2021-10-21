@@ -12,8 +12,8 @@ module.exports.getAll = async (req, res)=>{
 }
 
 module.exports.addProduct = async (req, res)=>{
-    const { name , quantity, category, price} = req.body
-    if (!name || !quantity || !category || !price){
+    const { name , quantity, category, price, size} = req.body
+    if (!name || !quantity || !category || !price || !size){
         return res.status(400).json({message: "All field required"})
     }
 
@@ -21,7 +21,8 @@ module.exports.addProduct = async (req, res)=>{
         name: name,
         quantity: quantity,
         category: category,
-        price: price
+        price: price,
+        size : size
     })
     await newProduct.save()
     .then(product=>{
@@ -84,7 +85,15 @@ module.exports.getBill = async (req, res)=>{
         //const result = await Product.aggregate([{$project: {name : 1, category:1, total: {$add : ["$quantity", "$price"]}}}])
         //const result = await Product.aggregate([{$group :{_id: "$category", total : {$sum: "$price"}}}])
         //const result = await Product.aggregate([{$group : {_id: "$category", total:{$sum: "$quantity"}}}])
-        const result = await Product.aggregate([{$project : {name : 1, category : 1, totalSize : {$sum : "$size"}}}])
+        //const result = await Product.aggregate([{$project : {name : 1, category : 1, totalSize : {$sum : "$size"}}}])
+        //const result = await Product.aggregate([{$project : { name : 1, allAdd : {$add : ["$quantity", {$sum : "$size"}]}}}])
+        //const result = await Product.aggregate([{$project : {name : 1, totalPrice : {$multiply : ["$quantity", "$price"]}}}])
+        //const result = await Product.aggregate([{$project : {name : 1, array : {$cond : {"if" : "$size", "then" : "Available", "else" : "Unavailable"}}}}])
+        //const result = await Product.aggregate([{$project : {name : 1, category : {$cond : {"if" : "$category", "then" : "true", "else" : "false"}}}}])
+        //const result = await Product.aggregate([{$set : {sizeSum : {$sum : "$size"}}}])
+        //const result = await Product.aggregate([{$set : {size : "medium", Brand : "Jockey"}}])
+        //const result = await Product.aggregate([{$match : {price : {$gte : 50000}}},{$project : {name : 1, price : 1}},{$set:{type : "costly"}}]).skip(1)
+        const result = await Product.aggregate([{$project : {name : 1, averageSize : {$avg : "$size"}}},{$project : {name : 1, averageSize : {$cond : {"if" : "$averageSize", "then" : "$averageSize", "else":0}}}}])
         res.status(200).json(result)
 
         // var prod = 0
