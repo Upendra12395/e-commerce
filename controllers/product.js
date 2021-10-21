@@ -83,7 +83,8 @@ module.exports.getBill = async (req, res)=>{
 
         //const result = await Product.aggregate([{$project: {name : 1, category:1, total: {$add : ["$quantity", "$price"]}}}])
         //const result = await Product.aggregate([{$group :{_id: "$category", total : {$sum: "$price"}}}])
-        const result = await Product.aggregate([{$group : {_id: "$category", total:{$sum: "$quantity"}}}])
+        //const result = await Product.aggregate([{$group : {_id: "$category", total:{$sum: "$quantity"}}}])
+        const result = await Product.aggregate([{$project : {name : 1, category : 1, totalSize : {$sum : "$size"}}}])
         res.status(200).json(result)
 
         // var prod = 0
