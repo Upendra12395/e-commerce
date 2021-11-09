@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken')
 const user = require('../models/user')
 
 module.exports.signIn = (req, res)=>{
-    const { userName, email, contact, password} = req.body
-    if(!userName || !email || !contact || !password){
+    const { firstName, lastName, phone, email, password} = req.body
+    if(!firstName || !lastName|| !phone || !contact || !password){
         return res.status(400).json({message : "all fields required"})
     }
     User.findOne({email:email}).then((user)=>{
@@ -16,9 +16,10 @@ module.exports.signIn = (req, res)=>{
                 bcrypt.hash(password, salt, (err, hash)=>{
                     if(err) throw err;
                     const newUser = new User({
-                        userName:userName,
+                        firstName:firstName,
+                        lastName : lastName,
                         email:email,
-                        contact: contact,
+                        phone: phone,
                         password : hash
                     })
                     newUser.save().then((user)=>{
