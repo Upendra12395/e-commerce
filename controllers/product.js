@@ -21,8 +21,8 @@ module.exports.addProduct = async (req, res)=>{
         name: name,
         quantity: quantity,
         category: category,
-        price: price,
-        size : size
+        price: price//,
+        //size : size
     })
     await newProduct.save()
     .then(product=>{
