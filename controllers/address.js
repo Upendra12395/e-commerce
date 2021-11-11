@@ -13,7 +13,8 @@ module.exports.addAddress = (req, res) =>{
             city : city,
             state : state,
             country: country,
-            pincode : pincode
+            pincode : pincode,
+            user : userId
         })
         newAddress.save()
         .then(()=>{
@@ -26,7 +27,21 @@ module.exports.addAddress = (req, res) =>{
 }
 
 module.exports.updateOne = (req, res) =>{
-
+    const addressId = req.params._id
+    const userId = req.user._id
+    Address.findOne({_id : addressId, user : userId}).then((address)=>{
+        if(!address){
+            res.status(401).json({message : 'You are not authorized for this action'})
+        }else{
+            Address.findByIdAndUpdate(addressId, req.body, {useFindAndModify : false})
+            .then(()=>{
+                res.status(200).json({message : 'Address updated successfully'})
+            })
+            .catch(err =>{
+                res.status(500).json({message : err.message})
+            })
+        }
+    })
 }
 
 module.exports.deleteOne = (req, res)=>{
