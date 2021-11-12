@@ -45,7 +45,24 @@ module.exports.updateOne = (req, res) =>{
 }
 
 module.exports.deleteOne = (req, res)=>{
-
+    const userId = req.user._id
+    const addressId = req.params.id
+    Address.findOne({_id : addressId, user : userId}).then((isFound)=>{
+        if(!isFound){
+            res.status(401).json({message : 'You are not athorized for this action'})
+        }else{
+            Address.findByIdAndDelete(addressId)
+            .then(()=>{
+                res.status(200).json({message : 'Address removed successfully'})
+            })
+            .catch(err =>{
+                res.status(500).json({message : err.message})
+            })
+        }
+    })
+    .catch(err =>{
+        res.status(500).json({message : err.message})
+    })
 }
 
 module.exports.showAll = (req, res)=>{
