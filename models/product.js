@@ -16,11 +16,11 @@ const productSchema = new mongoose.Schema({
     price:{
         type: Number,
         required: true
-    }//,
-    // size:{
-    //     type: Array,                //added for mongoDB query practice
-    //     required: true
-    // }
+    },
+    size:{
+        type: Array,                //added for mongoDB query practice
+        required: true
+    }
 })
 
 module.exports = mongoose.model('Product', productSchema)

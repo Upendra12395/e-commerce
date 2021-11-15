@@ -93,7 +93,8 @@ module.exports.getBill = async (req, res)=>{
         //const result = await Product.aggregate([{$set : {sizeSum : {$sum : "$size"}}}])
         //const result = await Product.aggregate([{$set : {size : "medium", Brand : "Jockey"}}])
         //const result = await Product.aggregate([{$match : {price : {$gte : 50000}}},{$project : {name : 1, price : 1}},{$set:{type : "costly"}}]).skip(1)
-        const result = await Product.aggregate([{$project : {name : 1, averageSize : {$avg : "$size"}}},{$project : {name : 1, averageSize : {$cond : {"if" : "$averageSize", "then" : "$averageSize", "else":0}}}}])
+        //const result = await Product.aggregate([{$project : {name : 1, averageSize : {$avg : "$size"}}},{$project : {name : 1, averageSize : {$cond : {"if" : "$averageSize", "then" : "$averageSize", "else":0}}}}])
+        const result = await Product.aggregate([{$set : {total : {$sum : "$price"}}}])
         res.status(200).json(result)
 
         // var prod = 0
