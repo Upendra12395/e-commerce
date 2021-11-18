@@ -12,7 +12,7 @@ module.exports.userAuth = (req, res, next) =>{
             if(err){
                 return res.status(401).json({error : err.message})
             }else{
-                const _id = payload._id
+                const _id = payload.id
                 User.findById(_id).then((userData)=>{
                     req.user = userData
                     next();
